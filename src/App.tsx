@@ -4,9 +4,7 @@ import reactLogo from './assets/react.svg'
 import viteLogo from '/vite.svg'
 import './App.css'
 
-function Form() {
-  return <div>TODO: Add form content</div>
-}
+import { Form } from './components/Form'
 
 function App() {
   const [count, setCount] = useState(0)
