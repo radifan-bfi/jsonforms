@@ -1,14 +1,21 @@
 import { useState } from 'react'
+import { Routes, Route } from 'react-router-dom'
 import reactLogo from './assets/react.svg'
 import viteLogo from '/vite.svg'
 import './App.css'
+
+function Form() {
+  return <div>TODO: Add form content</div>
+}
 
 function App() {
   const [count, setCount] = useState(0)
 
   return (
-    <>
-      <div>
+    <Routes>
+      <Route path="/" element={
+        <>
+          <div>
         <a href="https://vite.dev" target="_blank">
           <img src={viteLogo} className="logo" alt="Vite logo" />
         </a>
@@ -29,6 +36,9 @@ function App() {
         Click on the Vite and React logos to learn more
       </p>
     </>
+      } />
+      <Route path="/form" element={<Form />} />
+    </Routes>
   )
 }
 
