@@ -3,6 +3,7 @@
 import { useState } from "react";
 import { get, set } from "lodash";
 import Ajv2020 from "ajv/dist/2020";
+import jsonLogic from "json-logic-js";
 import {
   FieldComponent,
   FieldCondition,
@@ -133,30 +134,11 @@ const Section: React.FC<{
 };
 
 const evaluateCondition = (condition: FieldCondition, formData: any): boolean => {
-  // Handle AND conditions
-  if ('and' in condition) {
-    return condition.and.every(c => evaluateCondition(c, formData));
-  }
-
-  // Handle OR conditions
-  if ('or' in condition) {
-    return condition.or.some(c => evaluateCondition(c, formData));
-  }
-
-  // Handle single conditions
-  const fieldValue = get(formData, condition.field);
-  
-  switch (condition.operator) {
-    case 'equals':
-      return fieldValue === condition.value;
-    case 'notEquals':
-      return fieldValue !== condition.value;
-    case 'exists':
-      return fieldValue !== undefined && fieldValue !== null && fieldValue !== '';
-    case 'notExists':
-      return fieldValue === undefined || fieldValue === null || fieldValue === '';
-    default:
-      return true;
+  try {
+    return jsonLogic.apply(condition, formData);
+  } catch (error) {
+    console.error('Error evaluating condition:', error);
+    return true; // Default to showing the field if there's an error
   }
 };
 
