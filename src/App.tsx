@@ -202,18 +202,39 @@ const Form: React.FC<{
     return path.replace(/^\$\.properties\./, '').replace(/\.properties\./g, '.');
   };
 
-  const convertErrorPath = (path: string): string => {
-    // Remove leading slash and convert to regular path
-    return path.replace(/^\//, '');
+  const getFieldPathFromError = (error: any): string => {
+    if (error.keyword === 'required') {
+      // Get the base path from instancePath
+      const basePath = error.instancePath.replace(/^\//, '');
+      const missingProperty = error.params.missingProperty;
+
+      // If instancePath is empty, it's a root level property
+      if (!basePath) {
+        return missingProperty;
+      }
+
+      // For nested objects, combine the base path with missing property
+      return `${basePath}.${missingProperty}`;
+    }
+
+    // For other validation errors (minLength, pattern, etc.)
+    // Convert /address/street to address.street
+    return error.instancePath.replace(/^\//, '').replace(/\//g, '.');
   };
 
-  const getFieldPathFromError = (error: any): string => {
-    // For required field errors
-    if (error.keyword === 'required') {
-      return error.params.missingProperty;
-    }
-    // For other validation errors
-    return convertErrorPath(error.instancePath);
+  // Helper function to check if a field should be validated in current step
+  const isFieldInCurrentStep = (fieldPath: string): boolean => {
+    return currentStepFields.some(stepField => {
+      // Exact match
+      if (stepField === fieldPath) return true;
+
+      // Check if the field is a parent of any current step field
+      // For example, if 'address.street' is in current step,
+      // we should validate 'address' required error
+      if (stepField.startsWith(`${fieldPath}.`)) return true;
+
+      return false;
+    });
   };
 
   const getFieldPaths = (component: FormBuilderComponent): string[] => {
@@ -229,9 +250,9 @@ const Form: React.FC<{
   };
 
   const currentStepFields = currentStepComponent.components.flatMap(getFieldPaths);
-  const currentStepErrors = Object.keys(errors).reduce((acc, key) => {
-    if (currentStepFields.includes(key)) {
-      acc[key] = errors[key];
+  const currentStepErrors = Object.entries(errors).reduce((acc, [key, value]) => {
+    if (isFieldInCurrentStep(key)) {
+      acc[key] = value;
     }
     return acc;
   }, {} as Record<string, string>);
@@ -244,8 +265,7 @@ const Form: React.FC<{
     if (!valid && validate.errors) {
       validate.errors.forEach((error) => {
         const fieldPath = getFieldPathFromError(error);
-        // Only include errors for fields in the current step
-        if (currentStepFields.some(field => fieldPath === field)) {
+        if (isFieldInCurrentStep(fieldPath)) {
           newErrors[fieldPath] = error.message || "Invalid value";
         }
       });
@@ -267,19 +287,18 @@ const Form: React.FC<{
     if (!valid && validate.errors) {
       const newErrors = { ...errors };
 
-      // Only update error for the changed field if it's in current step
-      if (currentStepFields.includes(objectPath)) {
-        const fieldError = validate.errors.find(error => {
-          const errorPath = getFieldPathFromError(error);
-          return errorPath === objectPath;
-        });
+      // Clear existing errors for the current step
+      currentStepFields.forEach(field => {
+        delete newErrors[field];
+      });
 
-        if (fieldError) {
-          newErrors[objectPath] = fieldError.message || "Invalid value";
-        } else {
-          delete newErrors[objectPath];
+      // Add new errors for the current step
+      validate.errors.forEach((error) => {
+        const fieldPath = getFieldPathFromError(error);
+        if (isFieldInCurrentStep(fieldPath)) {
+          newErrors[fieldPath] = error.message || "Invalid value";
         }
-      }
+      });
 
       setErrors(newErrors);
     } else {

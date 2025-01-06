@@ -128,7 +128,7 @@ export const formBuilderSchema: FormBuilder = {
         {
           componentType: "field",
           jsonSchemaPropertyPath: "$.properties.address.properties.postalCode",
-          inputType: "number",
+          inputType: "text",
           inputProps: {
             title: "Postal Code",
           },
