@@ -88,10 +88,6 @@ export type FieldComponent =
   | PasswordFieldComponent
   | PhoneFieldComponent;
 
-export type DependentFields = {
-  [field: string]: string[]; // Map of field to its dependent required fields
-};
-
 export type FormBuilderComponent =
   | SectionComponent
   | GridComponent
@@ -102,5 +98,4 @@ export type FormBuilder = {
   metadata: FormBuilderMetadata;
   components: (StepComponent | FormBuilderComponent)[];
   config?: FormBuilderConfig;
-  dependentFields?: DependentFields;
 };
