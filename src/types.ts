@@ -44,7 +44,6 @@ export type BaseFieldComponent = {
   inputProps: BaseInputProps;
   conditions?: {
     show?: FieldCondition[];
-    required?: FieldCondition[];
   };
 };
 
