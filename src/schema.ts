@@ -132,6 +132,24 @@ export const formBuilderSchema: FormBuilder = {
           inputProps: {
             title: "Postal Code",
           },
+          conditions: {
+            show: [
+              {
+                or: [
+                  {
+                    field: 'address.country',
+                    operator: 'equals',
+                    value: 'USA'
+                  },
+                  {
+                    field: 'address.country',
+                    operator: 'equals',
+                    value: 'UK'
+                  },
+                ]
+              }
+            ]
+          }
         },
       ],
     },
