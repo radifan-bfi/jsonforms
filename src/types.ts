@@ -32,11 +32,16 @@ export type GridComponent = {
   components: FormBuilderComponent[];
 };
 
-export type FieldCondition = {
+export type SingleFieldCondition = {
   field: string; // The field path to watch
   operator: "equals" | "notEquals" | "exists" | "notExists";
   value?: string | number | boolean; // Value to compare for equals/notEquals
 };
+
+export type FieldCondition =
+  | SingleFieldCondition
+  | { and: FieldCondition[] } // All conditions must be true
+  | { or: FieldCondition[] }; // Any condition must be true
 
 export type BaseFieldComponent = {
   componentType: "field";
