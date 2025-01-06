@@ -93,15 +93,17 @@ const Grid: React.FC<{
 
   return (
     <div className={`grid grid-cols-${columns}`}>
-      {component.components.map((comp, index) => (
-        <RenderComponent
-          key={index}
-          component={comp}
-          formData={formData}
-          onChange={onChange}
-          errors={errors}
-        />
-      ))}
+      {component.components
+        .filter(comp => shouldShowComponent(comp, formData))
+        .map((comp, index) => (
+          <RenderComponent
+            key={index}
+            component={comp}
+            formData={formData}
+            onChange={onChange}
+            errors={errors}
+          />
+        ))}
     </div>
   );
 };
@@ -127,6 +129,43 @@ const Section: React.FC<{
       ))}
     </div>
   );
+};
+
+const evaluateCondition = (condition: FieldCondition, formData: any): boolean => {
+  // Handle AND conditions
+  if ('and' in condition) {
+    return condition.and.every(c => evaluateCondition(c, formData));
+  }
+
+  // Handle OR conditions
+  if ('or' in condition) {
+    return condition.or.some(c => evaluateCondition(c, formData));
+  }
+
+  // Handle single conditions
+  const fieldValue = get(formData, condition.field);
+  
+  switch (condition.operator) {
+    case 'equals':
+      return fieldValue === condition.value;
+    case 'notEquals':
+      return fieldValue !== condition.value;
+    case 'exists':
+      return fieldValue !== undefined && fieldValue !== null && fieldValue !== '';
+    case 'notExists':
+      return fieldValue === undefined || fieldValue === null || fieldValue === '';
+    default:
+      return true;
+  }
+};
+
+const shouldShowComponent = (component: FormBuilderComponent, formData: any): boolean => {
+  if (component.componentType === 'field' && component.conditions?.show) {
+    return component.conditions.show.every(condition => 
+      evaluateCondition(condition, formData)
+    );
+  }
+  return true;
 };
 
 const RenderComponent: React.FC<{
@@ -396,15 +435,17 @@ const Form: React.FC<{
       <form onSubmit={handleSubmit}>
         <div className="step">
           <h3 className="step-title">{currentStepComponent.title}</h3>
-          {currentStepComponent.components.map((component, index) => (
-            <RenderComponent
-              key={index}
-              component={component}
-              formData={formData}
-              onChange={handleChange}
-              errors={currentStepErrors}
-            />
-          ))}
+          {currentStepComponent.components
+            .filter(comp => shouldShowComponent(comp, formData))
+            .map((component, index) => (
+              <RenderComponent
+                key={index}
+                component={component}
+                formData={formData}
+                onChange={handleChange}
+                errors={currentStepErrors}
+              />
+            ))}
         </div>
 
         <div className="flex justify-between mt-8 pt-6 border-t border-gray-200">
