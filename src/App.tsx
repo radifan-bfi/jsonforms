@@ -3,7 +3,6 @@
 import { useState } from "react";
 import { get, set } from "lodash";
 import Ajv2020 from "ajv/dist/2020";
-import "./App.css";
 import {
   FieldComponent,
   FormBuilder,
