@@ -2,6 +2,7 @@
   "version": "4",
   "specifiers": {
     "npm:@eslint/js@^9.17.0": "9.17.0",
+    "npm:@types/json-logic-js@^2.0.8": "2.0.8",
     "npm:@types/lodash@^4.17.14": "4.17.14",
     "npm:@types/react-dom@^18.3.5": "18.3.5_@types+react@18.3.18",
     "npm:@types/react@^18.3.18": "18.3.18",
@@ -12,6 +13,7 @@
     "npm:eslint-plugin-react-refresh@~0.4.16": "0.4.16_eslint@9.17.0",
     "npm:eslint@^9.17.0": "9.17.0",
     "npm:globals@^15.14.0": "15.14.0",
+    "npm:json-logic-js@^2.0.5": "2.0.5",
     "npm:lodash@^4.17.21": "4.17.21",
     "npm:postcss@^8.4.33": "8.4.49",
     "npm:react-dom@^18.3.1": "18.3.1_react@18.3.1",
@@ -343,6 +345,9 @@
     },
     "@types/estree@1.0.6": {
       "integrity": "sha512-AYnb1nQyY49te+VRAVgmzfcgjYS91mY5P0TKUDCLEM+gNnA+3T6rWITXRLYCpahpqSQbN5cE+gHpnPyXjHWxcw=="
+    },
+    "@types/json-logic-js@2.0.8": {
+      "integrity": "sha512-WgNsDPuTPKYXl0Jh0IfoCoJoAGGYZt5qzpmjuLSEg7r0cKp/kWtWp0HAsVepyPSPyXiHo6uXp/B/kW/2J1fa2Q=="
     },
     "@types/json-schema@7.0.15": {
       "integrity": "sha512-5+fP8P8MFNC+AyZCDxrB2pkZFPGzqQWUzpSeuuVLvm8VMcorNYavBqoFcxK8bQz4Qsbn4oUEEem4wDLfcysGHA=="
@@ -949,6 +954,9 @@
     "json-buffer@3.0.1": {
       "integrity": "sha512-4bV5BfR2mqfQTJm+V5tPPdf+ZpuhiIvTuAB5g8kcrXOZpTT/QwwVRWBywX1ozr6lEuPdbHxwaJlm9G6mI2sfSQ=="
     },
+    "json-logic-js@2.0.5": {
+      "integrity": "sha512-rTT2+lqcuUmj4DgWfmzupZqQDA64AdmYqizzMPWj3DxGdfFNsxPpcNVSaTj4l8W2tG/+hg7/mQhxjU3aPacO6g=="
+    },
     "json-schema-traverse@0.4.1": {
       "integrity": "sha512-xbbCH5dCYU5T8LcEhhuh7HJ88HXuW3qsI3Y0zOZFKfZEHcpWiHU/Jxzk629Brsab/mMiHQti9wMP+845RPe3Vg=="
     },
@@ -1475,6 +1483,7 @@
     "packageJson": {
       "dependencies": [
         "npm:@eslint/js@^9.17.0",
+        "npm:@types/json-logic-js@^2.0.8",
         "npm:@types/lodash@^4.17.14",
         "npm:@types/react-dom@^18.3.5",
         "npm:@types/react@^18.3.18",
@@ -1485,6 +1494,7 @@
         "npm:eslint-plugin-react-refresh@~0.4.16",
         "npm:eslint@^9.17.0",
         "npm:globals@^15.14.0",
+        "npm:json-logic-js@^2.0.5",
         "npm:lodash@^4.17.21",
         "npm:postcss@^8.4.33",
         "npm:react-dom@^18.3.1",

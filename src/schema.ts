@@ -46,7 +46,7 @@ export const formBuilderSchema: FormBuilder = {
   metadata: {
     title: "Profile Form",
     description: "This is profile form",
-    schema: "http://json-schema.org/draft/2020-12/schema",
+    schema: "https://example.com/complex-object.schema.json",
   },
   config: {
     persistData: true,
@@ -73,6 +73,7 @@ export const formBuilderSchema: FormBuilder = {
                   inputType: "text",
                   inputProps: {
                     title: "First Name",
+                    placeholder: "Input you first name",
                   },
                 },
                 {
@@ -81,6 +82,7 @@ export const formBuilderSchema: FormBuilder = {
                   inputType: "text",
                   inputProps: {
                     title: "Last Name",
+                    placeholder: "Input your last name",
                   },
                 },
               ],
@@ -93,6 +95,7 @@ export const formBuilderSchema: FormBuilder = {
           inputType: "text",
           inputProps: {
             title: "Phone Number",
+            className: "phone-number",
           },
         },
       ],
@@ -136,20 +139,12 @@ export const formBuilderSchema: FormBuilder = {
             show: [
               {
                 or: [
-                  {
-                    field: 'address.country',
-                    operator: 'equals',
-                    value: 'USA'
-                  },
-                  {
-                    field: 'address.country',
-                    operator: 'equals',
-                    value: 'UK'
-                  },
-                ]
-              }
-            ]
-          }
+                  { "===": [{ var: "address.country" }, "USA"] },
+                  { "===": [{ var: "address.country" }, "UK"] },
+                ],
+              },
+            ],
+          },
         },
       ],
     },

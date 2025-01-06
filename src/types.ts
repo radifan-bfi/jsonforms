@@ -1,3 +1,5 @@
+import * as jsonLogic from "json-logic-js";
+
 export type FormBuilderMetadata = {
   title: string;
   description: string;
@@ -32,9 +34,9 @@ export type GridComponent = {
   components: FormBuilderComponent[];
 };
 
-export type FieldCondition = {
-  [key: string]: any;  // JSON Logic rule structure
-};
+export type FieldCondition = jsonLogic.RulesLogic<
+  jsonLogic.AdditionalOperation
+>;
 
 export type BaseFieldComponent = {
   componentType: "field";
