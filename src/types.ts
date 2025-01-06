@@ -32,10 +32,20 @@ export type GridComponent = {
   components: FormBuilderComponent[];
 };
 
+export type FieldCondition = {
+  field: string; // The field path to watch
+  operator: "equals" | "notEquals" | "exists" | "notExists";
+  value?: string | number | boolean; // Value to compare for equals/notEquals
+};
+
 export type BaseFieldComponent = {
   componentType: "field";
   jsonSchemaPropertyPath: string;
   inputProps: BaseInputProps;
+  conditions?: {
+    show?: FieldCondition[];
+    required?: FieldCondition[];
+  };
 };
 
 export type BaseInputProps = {
@@ -78,6 +88,10 @@ export type FieldComponent =
   | PasswordFieldComponent
   | PhoneFieldComponent;
 
+export type DependentFields = {
+  [field: string]: string[]; // Map of field to its dependent required fields
+};
+
 export type FormBuilderComponent =
   | SectionComponent
   | GridComponent
@@ -88,4 +102,5 @@ export type FormBuilder = {
   metadata: FormBuilderMetadata;
   components: (StepComponent | FormBuilderComponent)[];
   config?: FormBuilderConfig;
+  dependentFields?: DependentFields;
 };
