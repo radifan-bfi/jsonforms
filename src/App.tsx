@@ -186,6 +186,7 @@ const Form: React.FC<{
   const [formData, setFormData] = useState({});
   const [errors, setErrors] = useState<Record<string, string>>({});
   const [currentStep, setCurrentStep] = useState(0);
+  const [isSubmitted, setIsSubmitted] = useState(false);
   const ajv = new Ajv2020({ allErrors: true });
   const validate = ajv.compile(dataSchema);
 
@@ -336,9 +337,34 @@ const Form: React.FC<{
     // Validate final step before submission
     const isValid = validateCurrentStep();
     if (isValid) {
-      console.log("Form data:", formData);
+      setIsSubmitted(true);
     }
   };
+
+  if (isSubmitted) {
+    return (
+      <div className="max-w-3xl mx-auto p-6 bg-white rounded-xl shadow-lg">
+        <h2 className="text-2xl font-bold text-gray-900 mb-6">Form Submitted Successfully!</h2>
+        <div className="bg-gray-50 p-4 rounded-lg">
+          <h3 className="text-lg font-semibold text-gray-700 mb-4">Form Data:</h3>
+          <pre className="bg-gray-800 text-green-400 p-4 rounded-md overflow-auto">
+            {JSON.stringify(formData, null, 2)}
+          </pre>
+        </div>
+        <button
+          onClick={() => {
+            setFormData({});
+            setErrors({});
+            setCurrentStep(0);
+            setIsSubmitted(false);
+          }}
+          className="mt-6 px-4 py-2 text-sm font-medium text-white bg-blue-600 border border-transparent rounded-md hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500"
+        >
+          Submit Another Response
+        </button>
+      </div>
+    );
+  }
 
   return (
     <div className="max-w-3xl mx-auto p-6 bg-white rounded-xl shadow-lg">
