@@ -26,46 +26,46 @@ const Field: React.FC<{
     case "text":
     case "phone":
       return (
-        <div className="field">
-          <label>{inputProps.title}</label>
+        <div className="mb-4">
+          <label className="block text-sm font-medium text-gray-700 mb-1">{inputProps.title}</label>
           <input
             type="text"
             value={value || ""}
             onChange={(e) => onChange(e.target.value)}
             placeholder={inputProps.placeholder}
             disabled={inputProps.disabled}
-            className={inputProps.className}
+            className={`w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500 ${inputProps.disabled ? 'bg-gray-100' : ''} ${inputProps.className || ''}`}
           />
-          {error && <span className="error">{error}</span>}
+          {error && <span className="text-red-500 text-sm mt-1">{error}</span>}
         </div>
       );
 
     case "number":
       return (
-        <div className="field">
-          <label>{inputProps.title}</label>
+        <div className="mb-4">
+          <label className="block text-sm font-medium text-gray-700 mb-1">{inputProps.title}</label>
           <input
             type="number"
             value={value || ""}
             onChange={(e) => onChange(e.target.value)}
             placeholder={inputProps.placeholder}
             disabled={inputProps.disabled}
-            className={inputProps.className}
+            className={`w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500 ${inputProps.disabled ? 'bg-gray-100' : ''} ${inputProps.className || ''}`}
           />
-          {error && <span className="error">{error}</span>}
+          {error && <span className="text-red-500 text-sm mt-1">{error}</span>}
         </div>
       );
 
     case "select": {
       const countries = ["USA", "Canada", "UK", "Australia"];
       return (
-        <div className="field">
-          <label>{inputProps.title}</label>
+        <div className="mb-4">
+          <label className="block text-sm font-medium text-gray-700 mb-1">{inputProps.title}</label>
           <select
             value={value || ""}
             onChange={(e) => onChange(e.target.value)}
             disabled={inputProps.disabled}
-            className={inputProps.className}
+            className={`w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500 ${inputProps.disabled ? 'bg-gray-100' : ''} ${inputProps.className || ''}`}
           >
             <option value="">Select {inputProps.title}</option>
             {countries.map((option) => (
@@ -114,9 +114,9 @@ const Section: React.FC<{
   errors: Record<string, string>;
 }> = ({ component, formData, onChange, errors }) => {
   return (
-    <div className="section">
-      {component.title && <h3>{component.title}</h3>}
-      {component.description && <p>{component.description}</p>}
+    <div className="mb-6 p-4 bg-gray-50 rounded-lg">
+      {component.title && <h3 className="text-lg font-semibold text-gray-900 mb-2">{component.title}</h3>}
+      {component.description && <p className="text-sm text-gray-600 mb-4">{component.description}</p>}
       {component.components.map((comp, index) => (
         <RenderComponent
           key={index}
@@ -341,20 +341,29 @@ const Form: React.FC<{
   };
 
   return (
-    <div className="form-builder">
-      <h2>{schema.metadata.title}</h2>
-      <p>{schema.metadata.description}</p>
+    <div className="max-w-3xl mx-auto p-6 bg-white rounded-xl shadow-lg">
+      <h2 className="text-2xl font-bold text-gray-900 mb-2">{schema.metadata.title}</h2>
+      <p className="text-gray-600 mb-6">{schema.metadata.description}</p>
 
-      <div className="step-indicator">
+      <div className="flex justify-between items-center mb-8">
         {steps.map((step, index) => (
           <div
             key={index}
-            className={`step-dot ${index === currentStep ? "active" : ""} ${
-              index < currentStep ? "completed" : ""
-            }`}
+            className={`flex items-center ${index !== steps.length - 1 ? 'flex-1' : ''}`}
           >
-            <span className="step-number">{index + 1}</span>
-            <span className="step-label">{step.title}</span>
+            <div className={`flex items-center justify-center w-8 h-8 rounded-full border-2 
+              ${index === currentStep ? 'border-blue-500 bg-blue-500 text-white' : 
+                index < currentStep ? 'border-green-500 bg-green-500 text-white' : 
+                'border-gray-300 text-gray-500'}`}
+            >
+              {index < currentStep ? '✓' : index + 1}
+            </div>
+            <span className="ml-2 text-sm font-medium text-gray-900">{step.title}</span>
+            {index !== steps.length - 1 && (
+              <div className={`flex-1 h-0.5 mx-4 ${
+                index < currentStep ? 'bg-green-500' : 'bg-gray-300'
+              }`}></div>
+            )}
           </div>
         ))}
       </div>
@@ -373,26 +382,30 @@ const Form: React.FC<{
           ))}
         </div>
 
-        <div className="form-navigation">
+        <div className="flex justify-between mt-8 pt-6 border-t border-gray-200">
           {currentStep > 0 && (
             <button
               type="button"
               onClick={handlePrevious}
-              className="nav-button previous"
+              className="px-4 py-2 text-sm font-medium text-gray-700 bg-white border border-gray-300 rounded-md hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500"
             >
               Previous
             </button>
           )}
+          <div className="flex-1"></div>
           {currentStep < steps.length - 1 ? (
             <button
               type="button"
               onClick={handleNext}
-              className="nav-button next"
+              className="px-4 py-2 text-sm font-medium text-white bg-blue-600 border border-transparent rounded-md hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500"
             >
               Next
             </button>
           ) : (
-            <button type="submit" className="nav-button submit">
+            <button
+              type="submit"
+              className="px-4 py-2 text-sm font-medium text-white bg-green-600 border border-transparent rounded-md hover:bg-green-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-green-500"
+            >
               Submit
             </button>
           )}
@@ -404,7 +417,7 @@ const Form: React.FC<{
 
 function App() {
   return (
-    <div className="App">
+    <div className="min-h-screen bg-gray-100 py-12 px-4 sm:px-6 lg:px-8">
       <Form schema={formBuilderSchema} />
     </div>
   );
